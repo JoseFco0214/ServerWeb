@@ -25,12 +25,37 @@ void ESP32WebConfig::begin() {
   // Intentar modo STA
   startSTAMode();
 
+  // Modo AP
+//    startAPMode();
+
 }
 
 void ESP32WebConfig::handleClient() {
   server.handleClient();
 }
 
+// ------------------------------------------------------------ APMODE
+void ESP32WebConfig::startAPMode() {
+    // Iniciar AP
+  WiFi.softAPConfig(local_IP, gateway, subnet);
+  WiFi.softAP(ssidAP, passAP);
+
+  Serial.println("Iniciando en modo AP...");
+  Serial.println("SSIDAP :"+String(ssidAP));
+  Serial.println("PASSAP :"+String(passAP));
+  Serial.println(WiFi.softAPIP());
+
+  // Rutas del servidor
+  server.on("/", std::bind(&ESP32WebConfig::handleRoot, this));
+  server.on("/save", HTTP_POST, std::bind(&ESP32WebConfig::handleSave, this));
+  server.on("/restart", HTTP_GET, std::bind(&ESP32WebConfig::handleRestart, this));
+
+  server.begin();
+  Serial.println("Servidor HTTP iniciado");
+
+
+}
+// ------------------------------------------------------------ STAMODE
 void ESP32WebConfig::startSTAMode() {
   Serial.println("Iniciando en modo STA...");
 
@@ -66,7 +91,7 @@ void ESP32WebConfig::startSTAMode() {
 
 }
 
-
+// ------------------------------------------------------------
 bool ESP32WebConfig::isAuthenticated() {
   if (!server.authenticate(authUser, authPass)) {
     server.requestAuthentication();
@@ -75,7 +100,7 @@ bool ESP32WebConfig::isAuthenticated() {
   return true;
 
 }
-
+// ------------------------------------------------------------
 void ESP32WebConfig::handleRoot() {
     if (!isAuthenticated()) return;
 
@@ -131,19 +156,20 @@ String html = R"rawliteral(
   server.send(200, "text/html", html);
 }
 
+// ------------------------------------------------------------
 void ESP32WebConfig::handleSave() {
   if (!isAuthenticated()) return;
 
-  wifiSSID = server.arg("ssid");
-  wifiPASS = server.arg("pass");
+ // wifiSSID = server.arg("ssid");
+ // wifiPASS = server.arg("pass");
   ipStr = server.arg("ip");
   maskStr = server.arg("mask");
   gatewayStr = server.arg("gateway");
 
   
   Serial.println("handleSave()");
-  Serial.println("SSID: " + wifiSSID);
-  Serial.println("PASS: " + wifiPASS);
+//  Serial.println("SSID: " + wifiSSID);
+//  Serial.println("PASS: " + wifiPASS);
   Serial.println("IP: " + ipStr);
 
   savePreferences();

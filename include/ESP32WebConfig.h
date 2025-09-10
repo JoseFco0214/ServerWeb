@@ -29,7 +29,7 @@ class ESP32WebConfig {
     const char* authUser;
     const char* authPass;
     String wifiSSID;
-    String wifiPASS;
+    const char* wifiPASS;
 
 
     bool isAuthenticated();
