@@ -8,10 +8,10 @@
 
 class ESP32WebConfig {
   public:
-    ESP32WebConfig(const char* ssidAP = "ESP32_Config", 
-                   const char* passAP = "12345678", 
-                   const char* wifiSSID = "SSID_WiFi", 
-                   const char* wifiPASS = "PASS_WiFi", 
+    ESP32WebConfig(const char* fssidAP = "ESP32_Config", 
+                   const char* fpassAP = "12345678", 
+                   const char* fwifiSSID = "SSID_WiFi", 
+                   const char* fwifiPASS = "PASS_WiFi", 
                    const char* user = "admin", 
                    const char* pwd = "1234");
 
@@ -28,8 +28,8 @@ class ESP32WebConfig {
     const char* passAP;
     const char* authUser;
     const char* authPass;
-    const char* wifiSSID;
-    const char* wifiPASS;
+    String wifiSSID;
+    String wifiPASS;
 
 
     bool isAuthenticated();

@@ -1,11 +1,12 @@
 #include "ESP32WebConfig.h"
 
-ESP32WebConfig::ESP32WebConfig(const char* ssid, const char* pass, const char* user, const char* pwd)
+ESP32WebConfig::ESP32WebConfig(const char* fssidAP, const char* fpassAP, const char* fwifiSSID, 
+                   const char* fwifiPASS, const char* user, const char* pwd)
   : server(80) {
-  //ssidAP = ssid;
-  //passAP = pass;
-  wifiSSID = ssid;
-  wifiPASS = pass;
+  ssidAP = fssidAP;
+  passAP = fpassAP;
+  wifiSSID = fwifiSSID;
+  wifiPASS = fwifiPASS;
 
   authUser = user;
   authPass = pwd;
@@ -40,8 +41,8 @@ void ESP32WebConfig::startSTAMode() {
     Serial.println("⚠️ Error al configurar IP estática, usando DHCP...");
   }
 
-  Serial.println("Conectando a WiFi: " + wifiSSID);
-  WiFi.begin(wifiSSID.c_str(), wifiPASS.c_str());
+  Serial.println("Conectando a wifiSSID : " + wifiSSID);
+  WiFi.begin(wifiSSID, wifiPASS);
 
   unsigned long startAttempt = millis();
   while (WiFi.status() != WL_CONNECTED && millis() - startAttempt < 10000) {
@@ -81,8 +82,8 @@ void ESP32WebConfig::handleRoot() {
    
    
   Serial.println("handleRoot()");      
-  Serial.println("SSID: " + wifiSSID);
-  Serial.println("PASS: " + wifiPASS);
+  Serial.println("SSID: " + String(wifiSSID));
+  Serial.println("PASS: " + String(wifiPASS));
   Serial.println("IP: " + ipStr);
   Serial.println("MASK: " + maskStr);
   Serial.println("GATEWAY: " + gatewayStr);
@@ -138,6 +139,12 @@ void ESP32WebConfig::handleSave() {
   ipStr = server.arg("ip");
   maskStr = server.arg("mask");
   gatewayStr = server.arg("gateway");
+
+  
+  Serial.println("handleSave()");
+  Serial.println("SSID: " + wifiSSID);
+  Serial.println("PASS: " + wifiPASS);
+  Serial.println("IP: " + ipStr);
 
   savePreferences();
 
