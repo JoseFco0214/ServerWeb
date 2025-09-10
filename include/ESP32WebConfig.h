@@ -10,6 +10,8 @@ class ESP32WebConfig {
   public:
     ESP32WebConfig(const char* ssidAP = "ESP32_Config", 
                    const char* passAP = "12345678", 
+                   const char* wifiSSID = "SSID_WiFi", 
+                   const char* wifiPASS = "PASS_WiFi", 
                    const char* user = "admin", 
                    const char* pwd = "1234");
 
@@ -20,13 +22,15 @@ class ESP32WebConfig {
     Preferences preferences;
     WebServer server;
     String ipStr, maskStr, gatewayStr;
-    String wifiSSID, wifiPASS;
     IPAddress local_IP, subnet, gateway;
 
     const char* ssidAP;
     const char* passAP;
     const char* authUser;
     const char* authPass;
+    const char* wifiSSID;
+    const char* wifiPASS;
+
 
     bool isAuthenticated();
     void handleRoot();
